@@ -58,3 +58,21 @@ steps_table(mh_odds_ratio(smoking))[, c("symbol", "label", "result")]
 ## ----include = FALSE----------------------------------------------------------
 options(epibyhand.verbose = 2, epibyhand.digits = 4)
 
+## -----------------------------------------------------------------------------
+options(epibyhand.verbose = 1)
+
+screening <- epi2x2(90, 180, 10, 1720,
+                    exposure = c("Test positive", "Test negative"),
+                    outcome  = c("Diseased", "Healthy"))
+
+predictive_value(screening)
+
+## -----------------------------------------------------------------------------
+options(epibyhand.verbose = 0)
+vapply(c(0.01, 0.05, 0.20, 0.50),
+       function(p) estimate(predictive_value(screening, prevalence = p)),
+       numeric(1))
+
+## ----include = FALSE----------------------------------------------------------
+options(epibyhand.verbose = 2)
+

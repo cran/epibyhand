@@ -119,3 +119,24 @@ check_zero_cells <- function(x) {
     "null and its confidence interval is approximate."
   )
 }
+
+
+#' Describe an exposure group in prose
+#'
+#' Always names the epidemiological role ("the exposed"), and appends the
+#' user's own label in parentheses when it differs from the default. Pasting a
+#' custom label directly after "the" produced text like "among the ate potato
+#' salad".
+#'
+#' @param x An `epi2x2`.
+#' @param which `1` for the exposed row, `2` for the unexposed row.
+#' @return A character string.
+#' @keywords internal
+#' @noRd
+group_phrase <- function(x, which) {
+  default <- c("Exposed", "Unexposed")[which]
+  label <- x$exposure[which]
+  out <- paste0("the ", tolower(default))
+  if (!identical(label, default)) out <- paste0(out, " (", label, ")")
+  out
+}

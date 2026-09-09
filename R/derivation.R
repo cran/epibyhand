@@ -242,13 +242,35 @@ estimate <- function(x) {
 }
 
 #' Extract the confidence interval from a derivation
+#'
+#' Confidence intervals in this package are computed when the measure is
+#' computed, because the derivation displays the arithmetic that produced
+#' them. `level` therefore cannot change the result here; supplying one that
+#' differs from the level the derivation was built at raises a warning. Set
+#' the level with the `conf_level` argument of the measure instead.
+#'
 #' @param object An `epibyhand_derivation`.
 #' @param parm Unused, for S3 consistency.
-#' @param level Unused; the level is fixed when the derivation is built.
+#' @param level Ignored, with a warning if it differs from the level the
+#'   derivation was built at. Use `conf_level` on the measure instead.
 #' @param ... Unused.
 #' @return Numeric vector of length 2.
+#' @examples
+#' d <- odds_ratio(epi2x2(36, 14, 30, 25), conf_level = 0.99)
+#' confint(d)
 #' @export
 confint.epibyhand_derivation <- function(object, parm, level, ...) {
+  if (!missing(level) &&
+      !isTRUE(all.equal(as.numeric(level), as.numeric(object$conf_level)))) {
+    warning(
+      "`level` is ignored. This interval was computed at ",
+      format(100 * object$conf_level), "% when the derivation was built, and ",
+      "the derivation shows the arithmetic that produced it, so it cannot be ",
+      "recomputed here. For a ", format(100 * as.numeric(level)),
+      "% interval, pass `conf_level = ", format(as.numeric(level)),
+      "` to the function that created this object.",
+      call. = FALSE)
+  }
   object$ci
 }
 

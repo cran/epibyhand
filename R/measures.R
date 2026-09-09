@@ -15,7 +15,7 @@ risk_steps <- function(x, digits) {
     n1 = n1, n0 = n0, r1 = r1, r0 = r0,
     steps = list(
       derivation_step(
-        label = paste0("Risk of ", x$outcome[1L], " among the ", tolower(x$exposure[1L])),
+        label = paste0("Risk of ", x$outcome[1L], " among ", group_phrase(x, 1L)),
         symbol = "R1",
         formula = "a / (a + b)",
         substituted = paste0(fmt(x$a, digits), " / (", fmt(x$a, digits), " + ",
@@ -23,7 +23,7 @@ risk_steps <- function(x, digits) {
         result = r1
       ),
       derivation_step(
-        label = paste0("Risk of ", x$outcome[1L], " among the ", tolower(x$exposure[2L])),
+        label = paste0("Risk of ", x$outcome[1L], " among ", group_phrase(x, 2L)),
         symbol = "R0",
         formula = "c / (c + d)",
         substituted = paste0(fmt(x$c, digits), " / (", fmt(x$c, digits), " + ",
@@ -132,13 +132,13 @@ odds_ratio <- function(x, ..., conf_level = 0.95) {
 
   steps <- list(
     derivation_step(
-      label = paste0("Odds of ", x$outcome[1L], " among the ", tolower(x$exposure[1L])),
+      label = paste0("Odds of ", x$outcome[1L], " among ", group_phrase(x, 1L)),
       symbol = "odds1", formula = "a / b",
       substituted = paste0(fmt(x$a, digits), " / ", fmt(x$b, digits)),
       result = odds1
     ),
     derivation_step(
-      label = paste0("Odds of ", x$outcome[1L], " among the ", tolower(x$exposure[2L])),
+      label = paste0("Odds of ", x$outcome[1L], " among ", group_phrase(x, 2L)),
       symbol = "odds0", formula = "c / d",
       substituted = paste0(fmt(x$c, digits), " / ", fmt(x$d, digits)),
       result = odds0

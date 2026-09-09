@@ -11,7 +11,8 @@
 
 \item{parm}{Unused, for S3 consistency.}
 
-\item{level}{Unused; the level is fixed when the derivation is built.}
+\item{level}{Ignored, with a warning if it differs from the level the
+derivation was built at. Use \code{conf_level} on the measure instead.}
 
 \item{...}{Unused.}
 }
@@ -19,5 +20,13 @@
 Numeric vector of length 2.
 }
 \description{
-Extract the confidence interval from a derivation
+Confidence intervals in this package are computed when the measure is
+computed, because the derivation displays the arithmetic that produced
+them. \code{level} therefore cannot change the result here; supplying one that
+differs from the level the derivation was built at raises a warning. Set
+the level with the \code{conf_level} argument of the measure instead.
+}
+\examples{
+d <- odds_ratio(epi2x2(36, 14, 30, 25), conf_level = 0.99)
+confint(d)
 }

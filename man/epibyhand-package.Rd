@@ -42,5 +42,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Raj Subedi \email{rajsubediresearch@gmail.com}
 
+Authors:
+\itemize{
+  \item Raj Subedi \email{rajsubediresearch@gmail.com}
+}
+
 }
 \keyword{internal}
