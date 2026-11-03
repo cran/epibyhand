@@ -19,6 +19,9 @@
 #'   \item{`epibyhand.verbose`}{Detail level for printing: `0` result only,
 #'     `1` adds symbolic formulas, `2` (default) full worked solution.}
 #'   \item{`epibyhand.digits`}{Decimal places, default `4`.}
+#'   \item{`epibyhand.knit`}{How derivations appear in Quarto and R Markdown
+#'     documents: `"markdown"` (default) typesets them as mathematics,
+#'     `"console"` shows the console output.}
 #' }
 #'
 #' @keywords internal

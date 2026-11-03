@@ -28,6 +28,9 @@ of scope by definition rather than by omission.
 \item{\code{epibyhand.verbose}}{Detail level for printing: \code{0} result only,
 \code{1} adds symbolic formulas, \code{2} (default) full worked solution.}
 \item{\code{epibyhand.digits}}{Decimal places, default \code{4}.}
+\item{\code{epibyhand.knit}}{How derivations appear in Quarto and R Markdown
+documents: \code{"markdown"} (default) typesets them as mathematics,
+\code{"console"} shows the console output.}
 }
 }
 

@@ -228,6 +228,26 @@ Nothing about the test changed across those four numbers.
 options(epibyhand.verbose = 2)
 ```
 
+## In your own documents
+
+Every derivation in this vignette has been typeset as mathematics, with
+fractions, square roots and subscripts, and none of the code above asks for
+that. When a derivation is the value of a chunk in a Quarto or R Markdown
+document, it is rendered this way automatically, to HTML, PDF or Word.
+
+That makes an answer key a matter of writing the questions: the worked
+solutions come from the same calls a student would make.
+
+For problem sets written in LaTeX directly, `to_latex()` returns the same
+derivation as a fragment that needs only `\usepackage{amsmath}`:
+
+```{r}
+cat(to_latex(odds_ratio(crude), verbose = 1))
+```
+
+`standalone = TRUE` wraps it in a complete document. If you would rather keep
+the console style in a document, set `options(epibyhand.knit = "console")`.
+
 ## Scope
 
 This package covers methods a student can compute by hand on paper. The

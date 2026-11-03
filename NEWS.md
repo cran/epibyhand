@@ -1,3 +1,34 @@
+# epibyhand 0.3.0
+
+## New features
+
+* Derivations now render as typeset mathematics. In a Quarto or R Markdown
+  document, a derivation that is the value of a code chunk is displayed with
+  fractions, square roots and subscripts instead of console text, and its
+  tables become real tables. This works for HTML, PDF and Word output and
+  needs no change to existing code. Set `options(epibyhand.knit = "console")`
+  to keep the old console style in documents.
+
+* `to_latex()` returns a derivation as a LaTeX fragment for problem sets,
+  exams and lecture notes written in LaTeX directly. It needs only
+  `\usepackage{amsmath}`. `standalone = TRUE` gives a complete document.
+
+* `to_markdown()` returns the Markdown that documents display, for use outside
+  knitr.
+
+* `derivation_step()` gains a `latex` argument, so measures written with
+  `derivation()` and `derivation_step()` can typeset their formulas too.
+
+## Internal
+
+* knitr remains in Suggests. The `knit_print()` method is registered lazily and
+  exists only when knitr is loaded; `Imports` is still `stats` alone.
+
+* The LaTeX for every built-in formula is written by hand and keyed by the
+  exact plain-text formula, so the console and typeset versions cannot drift
+  apart silently: editing a formula without updating its LaTeX fails the test
+  suite.
+
 # epibyhand 0.2.0
 
 ## New features

@@ -60,12 +60,19 @@ rule <- function(label = NULL, width = NULL) {
 #' @param table Optional data frame. Per-unit working shown as a grid beneath
 #'   the formula. Used when a step aggregates over strata and a single
 #'   substituted line would be unreadable.
+#' @param latex Optional character. The right-hand side of `formula` as LaTeX,
+#'   e.g. `"\\frac{a}{a + b}"`, used by [to_markdown()], [to_latex()] and in
+#'   Quarto or R Markdown documents. Built-in measures do not need it. Supply
+#'   it for measures you write yourself; without it the plain-text formula is
+#'   shown as upright text.
 #'
 #' @return An object of class `epibyhand_step`.
 #' @export
 derivation_step <- function(label, formula, substituted, result,
-                            symbol = NULL, note = NULL, table = NULL) {
-  stopifnot(is.character(label), is.character(formula))
+                            symbol = NULL, note = NULL, table = NULL,
+                            latex = NULL) {
+  stopifnot(is.character(label), is.character(formula),
+            is.null(latex) || (is.character(latex) && length(latex) == 1L))
   structure(
     list(
       label = label,
@@ -74,7 +81,8 @@ derivation_step <- function(label, formula, substituted, result,
       result = result,
       symbol = symbol,
       note = note,
-      table = table
+      table = table,
+      latex = latex
     ),
     class = "epibyhand_step"
   )

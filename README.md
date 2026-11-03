@@ -129,6 +129,19 @@ Both can be overridden for a single call: `print(d, verbose = 1, digits = 2)`.
 `steps_table()` returns the derivation as a data frame, for building answer
 keys or rendering the working in a format this package does not provide.
 
+### In documents
+
+In a Quarto or R Markdown document, a derivation that is the value of a chunk
+is typeset automatically: fractions, square roots and subscripts rather than
+console text, with real tables. Nothing needs to change in your code.
+
+For problem sets written directly in LaTeX, `to_latex()` returns the
+derivation as a fragment that needs only `\usepackage{amsmath}`:
+
+```r
+cat(to_latex(odds_ratio(epi2x2(36, 14, 30, 25))))
+```
+
 ## Design
 
 One S3 class, `epibyhand_derivation`, carries the result and the steps that
@@ -158,6 +171,7 @@ leaves the choice to you.
 | `mh_risk_ratio()` | Mantel-Haenszel RR, Greenland-Robins interval |
 | `homogeneity()` | Breslow-Day test, Tarone corrected |
 | `predictive_value()` | PPV or NPV, with Bayes' theorem and an optional target prevalence |
+| `to_latex()`, `to_markdown()` | The derivation as typeset mathematics, for documents and problem sets |
 | `check_work()` | Locate where a hand calculation diverged |
 | `steps_table()` | Return a derivation as a data frame |
 | `estimate()`, `confint()` | Extract the point estimate and interval |

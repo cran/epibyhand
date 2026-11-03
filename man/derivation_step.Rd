@@ -11,7 +11,8 @@ derivation_step(
   result,
   symbol = NULL,
   note = NULL,
-  table = NULL
+  table = NULL,
+  latex = NULL
 )
 }
 \arguments{
@@ -30,6 +31,12 @@ derivation_step(
 \item{table}{Optional data frame. Per-unit working shown as a grid beneath
 the formula. Used when a step aggregates over strata and a single
 substituted line would be unreadable.}
+
+\item{latex}{Optional character. The right-hand side of \code{formula} as LaTeX,
+e.g. \code{"\\\\frac{a}{a + b}"}, used by \code{\link[=to_markdown]{to_markdown()}}, \code{\link[=to_latex]{to_latex()}} and in
+Quarto or R Markdown documents. Built-in measures do not need it. Supply
+it for measures you write yourself; without it the plain-text formula is
+shown as upright text.}
 }
 \value{
 An object of class \code{epibyhand_step}.

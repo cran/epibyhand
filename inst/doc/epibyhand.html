@@ -370,57 +370,103 @@ death.</p>
 </div>
 <div id="the-crude-analysis" class="section level2">
 <h2>The crude analysis</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">odds_ratio</span>(crude)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; ── Odds ratio ──────────────────────────────────────────────────────────────</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; Data</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;               Dead  Alive  Total</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;   Smoker       139    443    582</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;   Non-smoker   230    502    732</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt;   Total        369    945   1314</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; Step 1  Odds of Dead among the exposed (Smoker)</span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt;         odds1 = a / b</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt;               = 139 / 443</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt;               = 0.3138</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; Step 2  Odds of Dead among the unexposed (Non-smoker)</span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt;         odds0 = c / d</span></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt;               = 230 / 502</span></span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt;               = 0.4582</span></span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt; Step 3  Odds ratio</span></span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt;         OR = odds1 / odds0</span></span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt;            = 0.3138 / 0.4582</span></span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt;            = 0.6848</span></span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#&gt;         # Equivalently OR = ad / bc, which is why the odds ratio is the</span></span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt;         # same whether you condition on exposure or on outcome. That</span></span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#&gt;         # symmetry is what makes it usable in case-control studies.</span></span>
-<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt; Step 4  Standard error of log(OR), Woolf&#39;s method</span></span>
-<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt;         SE = sqrt(1/a + 1/b + 1/c + 1/d)</span></span>
-<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt;            = sqrt(1/139 + 1/443 + 1/230 + 1/502)</span></span>
-<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt;            = 0.1257</span></span>
-<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#&gt; Step 5  95% confidence interval, lower limit</span></span>
-<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a><span class="co">#&gt;         lower = exp(log(OR) - z * SE)</span></span>
-<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="co">#&gt;               = exp(-0.3786 - 1.96 * 0.1257)</span></span>
-<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a><span class="co">#&gt;               = 0.5353</span></span>
-<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="co">#&gt; Step 6  95% confidence interval, upper limit</span></span>
-<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="co">#&gt;         upper = exp(log(OR) + z * SE)</span></span>
-<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="co">#&gt;               = exp(-0.3786 + 1.96 * 0.1257)</span></span>
-<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a><span class="co">#&gt;               = 0.8761</span></span>
-<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="co">#&gt; Result</span></span>
-<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt;   OR = 0.6848 (95% CI 0.5353 to 0.8761)</span></span>
-<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a><span class="co">#&gt; Notes</span></span>
-<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a><span class="co">#&gt;   These data are tabulated as a cohort, where risk is estimable. The risk</span></span>
-<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="co">#&gt;   ratio here is 0.7601 against an odds ratio of 0.6848 -- the odds ratio is</span></span>
-<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt;   the more extreme of the two, and always will be. The two converge only</span></span>
-<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="co">#&gt;   when the outcome is rare; baseline risk here is 0.3142.</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">odds_ratio</span>(crude)</span></code></pre></div>
+<p><strong>Odds ratio</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Dead</th>
+<th align="right">Alive</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Smoker</td>
+<td align="right">139</td>
+<td align="right">443</td>
+<td align="right">582</td>
+</tr>
+<tr class="even">
+<td align="left">Non-smoker</td>
+<td align="right">230</td>
+<td align="right">502</td>
+<td align="right">732</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">369</td>
+<td align="right">945</td>
+<td align="right">1314</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Step 1.</strong> Odds of Dead among the exposed (Smoker)</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{odds}_1 &amp;= \frac{a}{b} \\
+&amp;= 139 / 443 \\
+&amp;= 0.3138
+\end{aligned}
+\]</span></p>
+<p><strong>Step 2.</strong> Odds of Dead among the unexposed
+(Non-smoker)</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{odds}_0 &amp;= \frac{c}{d} \\
+&amp;= 230 / 502 \\
+&amp;= 0.4582
+\end{aligned}
+\]</span></p>
+<p><strong>Step 3.</strong> Odds ratio</p>
+<p><span class="math display">\[
+\begin{aligned}
+OR &amp;= \frac{\text{odds}_1}{\text{odds}_0} \\
+&amp;= 0.3138 / 0.4582 \\
+&amp;= 0.6848
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>Equivalently OR = ad / bc, which is why the odds ratio is the same
+whether you condition on exposure or on outcome. That symmetry is what
+makes it usable in case-control studies.</p>
+</blockquote>
+<p><strong>Step 4.</strong> Standard error of log(OR), Woolf’s
+method</p>
+<p><span class="math display">\[
+\begin{aligned}
+SE &amp;= \sqrt{\frac{1}{a} + \frac{1}{b} + \frac{1}{c} + \frac{1}{d}}
+\\
+&amp;= \operatorname{sqrt}(1/139 + 1/443 + 1/230 + 1/502) \\
+&amp;= 0.1257
+\end{aligned}
+\]</span></p>
+<p><strong>Step 5.</strong> 95% confidence interval, lower limit</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{lower} &amp;= \exp\left(\log OR - z \cdot SE\right) \\
+&amp;= \exp(-0.3786 - 1.96 \times 0.1257) \\
+&amp;= 0.5353
+\end{aligned}
+\]</span></p>
+<p><strong>Step 6.</strong> 95% confidence interval, upper limit</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{upper} &amp;= \exp\left(\log OR + z \cdot SE\right) \\
+&amp;= \exp(-0.3786 + 1.96 \times 0.1257) \\
+&amp;= 0.8761
+\end{aligned}
+\]</span></p>
+<p><strong>Result:</strong> <span class="math inline">\(OR =
+0.6848\)</span> (95% CI 0.5353 to 0.8761)</p>
+<ul>
+<li>These data are tabulated as a cohort, where risk is estimable. The
+risk ratio here is 0.7601 against an odds ratio of 0.6848 – the odds
+ratio is the more extreme of the two, and always will be. The two
+converge only when the outcome is rare; baseline risk here is
+0.3142.</li>
+</ul>
 <p>Three things are worth noticing about that output.</p>
 <p>The odds ratio is <strong>0.68</strong>, and the confidence interval
 excludes 1. Read naively, smoking is protective, and significantly
@@ -436,80 +482,119 @@ is always the more extreme of the two.</p>
 <p>Since risks <em>are</em> estimable here, compute them directly. There
 is no need to see every step again, so turn the detail down:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">1</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">risk_ratio</span>(crude)</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; ── Risk ratio ──────────────────────────────────────────────────────────────</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; Step 1  Risk of Dead among the exposed (Smoker)</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;         R1 = a / (a + b)</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;            = 0.2388</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Step 2  Risk of Dead among the unexposed (Non-smoker)</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt;         R0 = c / (c + d)</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt;            = 0.3142</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; Step 3  Risk ratio</span></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt;         RR = R1 / R0</span></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt;            = 0.7601</span></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; Step 4  Standard error of log(RR)</span></span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt;         SE = sqrt(1/a - 1/(a+b) + 1/c - 1/(c+d))</span></span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt;            = 0.092</span></span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt;         # The interval is built on the log scale because RR is a ratio: its</span></span>
-<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt;         # sampling distribution is skewed, but log(RR) is roughly normal.</span></span>
-<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; Step 5  95% confidence interval, lower limit</span></span>
-<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt;         lower = exp(log(RR) - z * SE)</span></span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt;               = 0.6347</span></span>
-<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="co">#&gt; Step 6  95% confidence interval, upper limit</span></span>
-<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt;         upper = exp(log(RR) + z * SE)</span></span>
-<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="co">#&gt;               = 0.9102</span></span>
-<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt; Result</span></span>
-<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="co">#&gt;   RR = 0.7601 (95% CI 0.6347 to 0.9102)</span></span>
-<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="co">#&gt; Notes</span></span>
-<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="co">#&gt;   A risk ratio requires that everyone was followed for the same period. If</span></span>
-<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="co">#&gt;   follow-up time varied, use a rate ratio on person-time instead.</span></span>
-<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="fu">risk_difference</span>(crude)</span>
-<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt; ── Risk difference ─────────────────────────────────────────────────────────</span></span>
-<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt; Step 1  Risk of Dead among the exposed (Smoker)</span></span>
-<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt;         R1 = a / (a + b)</span></span>
-<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt;            = 0.2388</span></span>
-<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt; Step 2  Risk of Dead among the unexposed (Non-smoker)</span></span>
-<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt;         R0 = c / (c + d)</span></span>
-<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="co">#&gt;            = 0.3142</span></span>
-<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a><span class="co">#&gt; Step 3  Risk difference</span></span>
-<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a><span class="co">#&gt;         RD = R1 - R0</span></span>
-<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a><span class="co">#&gt;            = -0.0754</span></span>
-<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a><span class="co">#&gt; Step 4  Standard error of RD</span></span>
-<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a><span class="co">#&gt;         SE = sqrt(R1(1-R1)/(a+b) + R0(1-R0)/(c+d))</span></span>
-<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a><span class="co">#&gt;            = 0.0246</span></span>
-<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a><span class="co">#&gt;         # No log transform here. A difference can be negative, so it is</span></span>
-<span id="cb3-57"><a href="#cb3-57" tabindex="-1"></a><span class="co">#&gt;         # already on a scale where the normal approximation applies</span></span>
-<span id="cb3-58"><a href="#cb3-58" tabindex="-1"></a><span class="co">#&gt;         # directly.</span></span>
-<span id="cb3-59"><a href="#cb3-59" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-60"><a href="#cb3-60" tabindex="-1"></a><span class="co">#&gt; Step 5  95% confidence interval, lower limit</span></span>
-<span id="cb3-61"><a href="#cb3-61" tabindex="-1"></a><span class="co">#&gt;         lower = RD - z * SE</span></span>
-<span id="cb3-62"><a href="#cb3-62" tabindex="-1"></a><span class="co">#&gt;               = -0.1237</span></span>
-<span id="cb3-63"><a href="#cb3-63" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-64"><a href="#cb3-64" tabindex="-1"></a><span class="co">#&gt; Step 6  95% confidence interval, upper limit</span></span>
-<span id="cb3-65"><a href="#cb3-65" tabindex="-1"></a><span class="co">#&gt;         upper = RD + z * SE</span></span>
-<span id="cb3-66"><a href="#cb3-66" tabindex="-1"></a><span class="co">#&gt;               = -0.0271</span></span>
-<span id="cb3-67"><a href="#cb3-67" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-68"><a href="#cb3-68" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-69"><a href="#cb3-69" tabindex="-1"></a><span class="co">#&gt; Result</span></span>
-<span id="cb3-70"><a href="#cb3-70" tabindex="-1"></a><span class="co">#&gt;   RD = -0.0754 (95% CI -0.1237 to -0.0271)</span></span>
-<span id="cb3-71"><a href="#cb3-71" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-72"><a href="#cb3-72" tabindex="-1"></a><span class="co">#&gt; Notes</span></span>
-<span id="cb3-73"><a href="#cb3-73" tabindex="-1"></a><span class="co">#&gt;   The risk difference is on the absolute scale: -7.54 excess cases per 100</span></span>
-<span id="cb3-74"><a href="#cb3-74" tabindex="-1"></a><span class="co">#&gt;   exposed. Its reciprocal, 13.3, is the number needed to expose for one</span></span>
-<span id="cb3-75"><a href="#cb3-75" tabindex="-1"></a><span class="co">#&gt;   additional case.</span></span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">risk_ratio</span>(crude)</span></code></pre></div>
+<p><strong>Risk ratio</strong></p>
+<p><strong>Step 1.</strong> Risk of Dead among the exposed (Smoker)</p>
+<p><span class="math display">\[
+\begin{aligned}
+R_1 &amp;= \frac{a}{a + b} \\
+&amp;= 0.2388
+\end{aligned}
+\]</span></p>
+<p><strong>Step 2.</strong> Risk of Dead among the unexposed
+(Non-smoker)</p>
+<p><span class="math display">\[
+\begin{aligned}
+R_0 &amp;= \frac{c}{c + d} \\
+&amp;= 0.3142
+\end{aligned}
+\]</span></p>
+<p><strong>Step 3.</strong> Risk ratio</p>
+<p><span class="math display">\[
+\begin{aligned}
+RR &amp;= \frac{R_1}{R_0} \\
+&amp;= 0.7601
+\end{aligned}
+\]</span></p>
+<p><strong>Step 4.</strong> Standard error of log(RR)</p>
+<p><span class="math display">\[
+\begin{aligned}
+SE &amp;= \sqrt{\frac{1}{a} - \frac{1}{a+b} + \frac{1}{c} -
+\frac{1}{c+d}} \\
+&amp;= 0.092
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>The interval is built on the log scale because RR is a ratio: its
+sampling distribution is skewed, but log(RR) is roughly normal.</p>
+</blockquote>
+<p><strong>Step 5.</strong> 95% confidence interval, lower limit</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{lower} &amp;= \exp\left(\log RR - z \cdot SE\right) \\
+&amp;= 0.6347
+\end{aligned}
+\]</span></p>
+<p><strong>Step 6.</strong> 95% confidence interval, upper limit</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{upper} &amp;= \exp\left(\log RR + z \cdot SE\right) \\
+&amp;= 0.9102
+\end{aligned}
+\]</span></p>
+<p><strong>Result:</strong> <span class="math inline">\(RR =
+0.7601\)</span> (95% CI 0.6347 to 0.9102)</p>
+<ul>
+<li>A risk ratio requires that everyone was followed for the same
+period. If follow-up time varied, use a rate ratio on person-time
+instead.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">risk_difference</span>(crude)</span></code></pre></div>
+<p><strong>Risk difference</strong></p>
+<p><strong>Step 1.</strong> Risk of Dead among the exposed (Smoker)</p>
+<p><span class="math display">\[
+\begin{aligned}
+R_1 &amp;= \frac{a}{a + b} \\
+&amp;= 0.2388
+\end{aligned}
+\]</span></p>
+<p><strong>Step 2.</strong> Risk of Dead among the unexposed
+(Non-smoker)</p>
+<p><span class="math display">\[
+\begin{aligned}
+R_0 &amp;= \frac{c}{c + d} \\
+&amp;= 0.3142
+\end{aligned}
+\]</span></p>
+<p><strong>Step 3.</strong> Risk difference</p>
+<p><span class="math display">\[
+\begin{aligned}
+RD &amp;= R_1 - R_0 \\
+&amp;= -0.0754
+\end{aligned}
+\]</span></p>
+<p><strong>Step 4.</strong> Standard error of RD</p>
+<p><span class="math display">\[
+\begin{aligned}
+SE &amp;= \sqrt{\frac{R_1(1-R_1)}{a+b} + \frac{R_0(1-R_0)}{c+d}} \\
+&amp;= 0.0246
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>No log transform here. A difference can be negative, so it is already
+on a scale where the normal approximation applies directly.</p>
+</blockquote>
+<p><strong>Step 5.</strong> 95% confidence interval, lower limit</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{lower} &amp;= RD - z \cdot SE \\
+&amp;= -0.1237
+\end{aligned}
+\]</span></p>
+<p><strong>Step 6.</strong> 95% confidence interval, upper limit</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{upper} &amp;= RD + z \cdot SE \\
+&amp;= -0.0271
+\end{aligned}
+\]</span></p>
+<p><strong>Result:</strong> <span class="math inline">\(RD =
+-0.0754\)</span> (95% CI -0.1237 to -0.0271)</p>
+<ul>
+<li>The risk difference is on the absolute scale: -7.54 excess cases per
+100 exposed. Its reciprocal, 13.3, is the number needed to expose for
+one additional case.</li>
+</ul>
 <p>Every measure agrees: smokers died less often. A report written at
 this point would be internally consistent, statistically significant,
 and false.</p>
@@ -520,142 +605,319 @@ and false.</p>
 oldest women were the ones most likely to die within twenty years. Age
 is associated with the exposure and independently predicts the outcome,
 which is the definition of a confounder.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>smoking <span class="ot">&lt;-</span> <span class="fu">epi_strata</span>(</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">270</span>,  <span class="dv">12</span>, <span class="dv">327</span>),</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">80</span>, <span class="dv">167</span>,  <span class="dv">53</span>, <span class="dv">147</span>),</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">44</span>,   <span class="dv">6</span>, <span class="dv">165</span>,  <span class="dv">28</span>),</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">labels   =</span> <span class="fu">c</span>(<span class="st">&quot;18-44&quot;</span>, <span class="st">&quot;45-64&quot;</span>, <span class="st">&quot;65+&quot;</span>),</span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="at">exposure =</span> <span class="fu">c</span>(<span class="st">&quot;Smoker&quot;</span>, <span class="st">&quot;Non-smoker&quot;</span>),</span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="at">outcome  =</span> <span class="fu">c</span>(<span class="st">&quot;Dead&quot;</span>, <span class="st">&quot;Alive&quot;</span>)</span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>)</span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>smoking</span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; 18-44</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt;               Dead  Alive  Total</span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt;   Smoker        15    270    285</span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;   Non-smoker    12    327    339</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;   Total         27    597    624</span></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; 45-64</span></span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt;               Dead  Alive  Total</span></span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt;   Smoker        80    167    247</span></span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt;   Non-smoker    53    147    200</span></span>
-<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt;   Total        133    314    447</span></span>
-<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt; 65+</span></span>
-<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt;               Dead  Alive  Total</span></span>
-<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt;   Smoker        44      6     50</span></span>
-<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="co">#&gt;   Non-smoker   165     28    193</span></span>
-<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="co">#&gt;   Total        209     34    243</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>smoking <span class="ot">&lt;-</span> <span class="fu">epi_strata</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">270</span>,  <span class="dv">12</span>, <span class="dv">327</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">80</span>, <span class="dv">167</span>,  <span class="dv">53</span>, <span class="dv">147</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">44</span>,   <span class="dv">6</span>, <span class="dv">165</span>,  <span class="dv">28</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="at">labels   =</span> <span class="fu">c</span>(<span class="st">&quot;18-44&quot;</span>, <span class="st">&quot;45-64&quot;</span>, <span class="st">&quot;65+&quot;</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">exposure =</span> <span class="fu">c</span>(<span class="st">&quot;Smoker&quot;</span>, <span class="st">&quot;Non-smoker&quot;</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="at">outcome  =</span> <span class="fu">c</span>(<span class="st">&quot;Dead&quot;</span>, <span class="st">&quot;Alive&quot;</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>smoking</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; 18-44</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt;               Dead  Alive  Total</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt;   Smoker        15    270    285</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt;   Non-smoker    12    327    339</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;   Total         27    597    624</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; 45-64</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;               Dead  Alive  Total</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;   Smoker        80    167    247</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt;   Non-smoker    53    147    200</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt;   Total        133    314    447</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; 65+</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt;               Dead  Alive  Total</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt;   Smoker        44      6     50</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="co">#&gt;   Non-smoker   165     28    193</span></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co">#&gt;   Total        209     34    243</span></span></code></pre></div>
 <p>Look at the odds ratio inside each age group before pooling
 anything:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mh_odds_ratio</span>(smoking)<span class="sc">$</span>stratum_estimates, <span class="dv">3</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; 18-44 45-64   65+ </span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; 1.514 1.329 1.244</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mh_odds_ratio</span>(smoking)<span class="sc">$</span>stratum_estimates, <span class="dv">3</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; 18-44 45-64   65+ </span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; 1.514 1.329 1.244</span></span></code></pre></div>
 <p>All three are above 1. The crude estimate was 0.68. Adjustment here
 does not shift the estimate — it reverses it.</p>
 </div>
 <div id="pooling" class="section level2">
 <h2>Pooling</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">2</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">mh_odds_ratio</span>(smoking)</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; ── Mantel-Haenszel odds ratio ──────────────────────────────────────────────</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; Data</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;   18-44</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;                 Dead  Alive  Total</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt;     Smoker        15    270    285</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;     Non-smoker    12    327    339</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;     Total         27    597    624</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;   45-64</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;                 Dead  Alive  Total</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt;     Smoker        80    167    247</span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt;     Non-smoker    53    147    200</span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt;     Total        133    314    447</span></span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt;   65+</span></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;                 Dead  Alive  Total</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt;     Smoker        44      6     50</span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;     Non-smoker   165     28    193</span></span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt;     Total        209     34    243</span></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt; Step 1  Odds ratio within each stratum</span></span>
-<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt;         OR_i = (a_i * d_i) / (b_i * c_i)</span></span>
-<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="co">#&gt;         Stratum   a    b    c    d  n_i    OR_i</span></span>
-<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co">#&gt;         -------  --  ---  ---  ---  ---  ------</span></span>
-<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="co">#&gt;           18-44  15  270   12  327  624  1.5139</span></span>
-<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="co">#&gt;           45-64  80  167   53  147  447  1.3287</span></span>
-<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a><span class="co">#&gt;             65+  44    6  165   28  243  1.2444</span></span>
-<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a><span class="co">#&gt;         # Look at these before pooling. If they disagree substantially the</span></span>
-<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a><span class="co">#&gt;         # stratifying variable is an effect modifier, and a single pooled</span></span>
-<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a><span class="co">#&gt;         # number hides the finding rather than reporting it. Test with</span></span>
-<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a><span class="co">#&gt;         # homogeneity().</span></span>
-<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a><span class="co">#&gt; Step 2  Stratum contributions</span></span>
-<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a><span class="co">#&gt;         R_i = a_i*d_i/n_i     S_i = b_i*c_i/n_i</span></span>
-<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a><span class="co">#&gt;         Stratum      R_i      S_i</span></span>
-<span id="cb6-42"><a href="#cb6-42" tabindex="-1"></a><span class="co">#&gt;         -------  -------  -------</span></span>
-<span id="cb6-43"><a href="#cb6-43" tabindex="-1"></a><span class="co">#&gt;           18-44   7.8606   5.1923</span></span>
-<span id="cb6-44"><a href="#cb6-44" tabindex="-1"></a><span class="co">#&gt;           45-64  26.3087  19.8009</span></span>
-<span id="cb6-45"><a href="#cb6-45" tabindex="-1"></a><span class="co">#&gt;             65+     5.07   4.0741</span></span>
-<span id="cb6-46"><a href="#cb6-46" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-47"><a href="#cb6-47" tabindex="-1"></a><span class="co">#&gt;         # S_i is the weight this stratum carries in the pooled estimate. It</span></span>
-<span id="cb6-48"><a href="#cb6-48" tabindex="-1"></a><span class="co">#&gt;         # is largest where the stratum has the most information, so small</span></span>
-<span id="cb6-49"><a href="#cb6-49" tabindex="-1"></a><span class="co">#&gt;         # or unbalanced strata contribute little.</span></span>
-<span id="cb6-50"><a href="#cb6-50" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-51"><a href="#cb6-51" tabindex="-1"></a><span class="co">#&gt; Step 3  Pooled odds ratio</span></span>
-<span id="cb6-52"><a href="#cb6-52" tabindex="-1"></a><span class="co">#&gt;         OR_MH = sum(R_i) / sum(S_i)</span></span>
-<span id="cb6-53"><a href="#cb6-53" tabindex="-1"></a><span class="co">#&gt;               = 39.2393 / 29.0673</span></span>
-<span id="cb6-54"><a href="#cb6-54" tabindex="-1"></a><span class="co">#&gt;               = 1.3499</span></span>
-<span id="cb6-55"><a href="#cb6-55" tabindex="-1"></a><span class="co">#&gt;         # Equivalently sum(S_i * OR_i) / sum(S_i): a weighted average of</span></span>
-<span id="cb6-56"><a href="#cb6-56" tabindex="-1"></a><span class="co">#&gt;         # the stratum odds ratios with weights S_i. The pooled value must</span></span>
-<span id="cb6-57"><a href="#cb6-57" tabindex="-1"></a><span class="co">#&gt;         # fall between the smallest and largest stratum estimate; if yours</span></span>
-<span id="cb6-58"><a href="#cb6-58" tabindex="-1"></a><span class="co">#&gt;         # does not, the arithmetic is wrong.</span></span>
-<span id="cb6-59"><a href="#cb6-59" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-60"><a href="#cb6-60" tabindex="-1"></a><span class="co">#&gt; Step 4  Standard error of log(OR_MH), Robins-Breslow-Greenland</span></span>
-<span id="cb6-61"><a href="#cb6-61" tabindex="-1"></a><span class="co">#&gt;         SE = sqrt( sum(P_i R_i)/(2R^2) + sum(P_i S_i + Q_i R_i)/(2RS) + sum(Q_i S_i)/(2S^2) )</span></span>
-<span id="cb6-62"><a href="#cb6-62" tabindex="-1"></a><span class="co">#&gt;            = sqrt(0.0062 + 0.015 + 0.0089)</span></span>
-<span id="cb6-63"><a href="#cb6-63" tabindex="-1"></a><span class="co">#&gt;            = 0.1734</span></span>
-<span id="cb6-64"><a href="#cb6-64" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-65"><a href="#cb6-65" tabindex="-1"></a><span class="co">#&gt;         Stratum     P_i     Q_i</span></span>
-<span id="cb6-66"><a href="#cb6-66" tabindex="-1"></a><span class="co">#&gt;         -------  ------  ------</span></span>
-<span id="cb6-67"><a href="#cb6-67" tabindex="-1"></a><span class="co">#&gt;           18-44  0.5481  0.4519</span></span>
-<span id="cb6-68"><a href="#cb6-68" tabindex="-1"></a><span class="co">#&gt;           45-64  0.5078  0.4922</span></span>
-<span id="cb6-69"><a href="#cb6-69" tabindex="-1"></a><span class="co">#&gt;             65+  0.2963  0.7037</span></span>
-<span id="cb6-70"><a href="#cb6-70" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-71"><a href="#cb6-71" tabindex="-1"></a><span class="co">#&gt;         # P_i = (a_i+d_i)/n_i and Q_i = (b_i+c_i)/n_i are the concordant</span></span>
-<span id="cb6-72"><a href="#cb6-72" tabindex="-1"></a><span class="co">#&gt;         # and discordant proportions in each stratum.</span></span>
-<span id="cb6-73"><a href="#cb6-73" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-74"><a href="#cb6-74" tabindex="-1"></a><span class="co">#&gt; Step 5  95% confidence interval, lower limit</span></span>
-<span id="cb6-75"><a href="#cb6-75" tabindex="-1"></a><span class="co">#&gt;         lower = exp(log(OR_MH) - z * SE)</span></span>
-<span id="cb6-76"><a href="#cb6-76" tabindex="-1"></a><span class="co">#&gt;               = exp(0.3001 - 1.96 * 0.1734)</span></span>
-<span id="cb6-77"><a href="#cb6-77" tabindex="-1"></a><span class="co">#&gt;               = 0.961</span></span>
-<span id="cb6-78"><a href="#cb6-78" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-79"><a href="#cb6-79" tabindex="-1"></a><span class="co">#&gt; Step 6  95% confidence interval, upper limit</span></span>
-<span id="cb6-80"><a href="#cb6-80" tabindex="-1"></a><span class="co">#&gt;         upper = exp(log(OR_MH) + z * SE)</span></span>
-<span id="cb6-81"><a href="#cb6-81" tabindex="-1"></a><span class="co">#&gt;               = exp(0.3001 + 1.96 * 0.1734)</span></span>
-<span id="cb6-82"><a href="#cb6-82" tabindex="-1"></a><span class="co">#&gt;               = 1.8963</span></span>
-<span id="cb6-83"><a href="#cb6-83" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-84"><a href="#cb6-84" tabindex="-1"></a><span class="co">#&gt; Step 7  Crude odds ratio, ignoring the strata</span></span>
-<span id="cb6-85"><a href="#cb6-85" tabindex="-1"></a><span class="co">#&gt;         OR_crude = (A * D) / (B * C)  on the collapsed table</span></span>
-<span id="cb6-86"><a href="#cb6-86" tabindex="-1"></a><span class="co">#&gt;                  = (139 * 502) / (443 * 230)</span></span>
-<span id="cb6-87"><a href="#cb6-87" tabindex="-1"></a><span class="co">#&gt;                  = 0.6848</span></span>
-<span id="cb6-88"><a href="#cb6-88" tabindex="-1"></a><span class="co">#&gt;         # The crude estimate differs from the adjusted one by -49.3%. A</span></span>
-<span id="cb6-89"><a href="#cb6-89" tabindex="-1"></a><span class="co">#&gt;         # change beyond about 10% is the usual working signal that the</span></span>
-<span id="cb6-90"><a href="#cb6-90" tabindex="-1"></a><span class="co">#&gt;         # stratifying variable confounds the association. This is a</span></span>
-<span id="cb6-91"><a href="#cb6-91" tabindex="-1"></a><span class="co">#&gt;         # judgement about the data, not a hypothesis test -- do not decide</span></span>
-<span id="cb6-92"><a href="#cb6-92" tabindex="-1"></a><span class="co">#&gt;         # it with a p-value.</span></span>
-<span id="cb6-93"><a href="#cb6-93" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-94"><a href="#cb6-94" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-95"><a href="#cb6-95" tabindex="-1"></a><span class="co">#&gt; Result</span></span>
-<span id="cb6-96"><a href="#cb6-96" tabindex="-1"></a><span class="co">#&gt;   OR_MH = 1.3499 (95% CI 0.961 to 1.8963)</span></span>
-<span id="cb6-97"><a href="#cb6-97" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-98"><a href="#cb6-98" tabindex="-1"></a><span class="co">#&gt; Notes</span></span>
-<span id="cb6-99"><a href="#cb6-99" tabindex="-1"></a><span class="co">#&gt;   Pooling assumes one common odds ratio underlies every stratum. Check that</span></span>
-<span id="cb6-100"><a href="#cb6-100" tabindex="-1"></a><span class="co">#&gt;   with homogeneity() before reporting this number.</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">2</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">mh_odds_ratio</span>(smoking)</span></code></pre></div>
+<p><strong>Mantel-Haenszel odds ratio</strong></p>
+<p><em>18-44</em></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Dead</th>
+<th align="right">Alive</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Smoker</td>
+<td align="right">15</td>
+<td align="right">270</td>
+<td align="right">285</td>
+</tr>
+<tr class="even">
+<td align="left">Non-smoker</td>
+<td align="right">12</td>
+<td align="right">327</td>
+<td align="right">339</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">27</td>
+<td align="right">597</td>
+<td align="right">624</td>
+</tr>
+</tbody>
+</table>
+<p><em>45-64</em></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Dead</th>
+<th align="right">Alive</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Smoker</td>
+<td align="right">80</td>
+<td align="right">167</td>
+<td align="right">247</td>
+</tr>
+<tr class="even">
+<td align="left">Non-smoker</td>
+<td align="right">53</td>
+<td align="right">147</td>
+<td align="right">200</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">133</td>
+<td align="right">314</td>
+<td align="right">447</td>
+</tr>
+</tbody>
+</table>
+<p><em>65+</em></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Dead</th>
+<th align="right">Alive</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Smoker</td>
+<td align="right">44</td>
+<td align="right">6</td>
+<td align="right">50</td>
+</tr>
+<tr class="even">
+<td align="left">Non-smoker</td>
+<td align="right">165</td>
+<td align="right">28</td>
+<td align="right">193</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">209</td>
+<td align="right">34</td>
+<td align="right">243</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Step 1.</strong> Odds ratio within each stratum</p>
+<p><span class="math display">\[
+\begin{aligned}
+OR_i &amp;= \frac{a_i d_i}{b_i c_i}
+\end{aligned}
+\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Stratum</th>
+<th align="right">a</th>
+<th align="right">b</th>
+<th align="right">c</th>
+<th align="right">d</th>
+<th align="right">n_i</th>
+<th align="right">OR_i</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">18-44</td>
+<td align="right">15</td>
+<td align="right">270</td>
+<td align="right">12</td>
+<td align="right">327</td>
+<td align="right">624</td>
+<td align="right">1.5139</td>
+</tr>
+<tr class="even">
+<td align="left">45-64</td>
+<td align="right">80</td>
+<td align="right">167</td>
+<td align="right">53</td>
+<td align="right">147</td>
+<td align="right">447</td>
+<td align="right">1.3287</td>
+</tr>
+<tr class="odd">
+<td align="left">65+</td>
+<td align="right">44</td>
+<td align="right">6</td>
+<td align="right">165</td>
+<td align="right">28</td>
+<td align="right">243</td>
+<td align="right">1.2444</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Look at these before pooling. If they disagree substantially the
+stratifying variable is an effect modifier, and a single pooled number
+hides the finding rather than reporting it. Test with homogeneity().</p>
+</blockquote>
+<p><strong>Step 2.</strong> Stratum contributions</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp; R_i = \frac{a_i d_i}{n_i} \qquad S_i = \frac{b_i c_i}{n_i}
+\end{aligned}
+\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Stratum</th>
+<th align="right">R_i</th>
+<th align="right">S_i</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">18-44</td>
+<td align="right">7.8606</td>
+<td align="right">5.1923</td>
+</tr>
+<tr class="even">
+<td align="left">45-64</td>
+<td align="right">26.3087</td>
+<td align="right">19.8009</td>
+</tr>
+<tr class="odd">
+<td align="left">65+</td>
+<td align="right">5.07</td>
+<td align="right">4.0741</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>S_i is the weight this stratum carries in the pooled estimate. It is
+largest where the stratum has the most information, so small or
+unbalanced strata contribute little.</p>
+</blockquote>
+<p><strong>Step 3.</strong> Pooled odds ratio</p>
+<p><span class="math display">\[
+\begin{aligned}
+OR_{MH} &amp;= \frac{\sum_i R_i}{\sum_i S_i} \\
+&amp;= 39.2393 / 29.0673 \\
+&amp;= 1.3499
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>Equivalently sum(S_i * OR_i) / sum(S_i): a weighted average of the
+stratum odds ratios with weights S_i. The pooled value must fall between
+the smallest and largest stratum estimate; if yours does not, the
+arithmetic is wrong.</p>
+</blockquote>
+<p><strong>Step 4.</strong> Standard error of log(OR_MH),
+Robins-Breslow-Greenland</p>
+<p><span class="math display">\[
+\begin{aligned}
+SE &amp;= \sqrt{\frac{\sum_i P_i R_i}{2R^2} + \frac{\sum_i (P_i S_i +
+Q_i R_i)}{2RS} + \frac{\sum_i Q_i S_i}{2S^2}} \\
+&amp;= \operatorname{sqrt}(0.0062 + 0.015 + 0.0089) \\
+&amp;= 0.1734
+\end{aligned}
+\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Stratum</th>
+<th align="right">P_i</th>
+<th align="right">Q_i</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">18-44</td>
+<td align="right">0.5481</td>
+<td align="right">0.4519</td>
+</tr>
+<tr class="even">
+<td align="left">45-64</td>
+<td align="right">0.5078</td>
+<td align="right">0.4922</td>
+</tr>
+<tr class="odd">
+<td align="left">65+</td>
+<td align="right">0.2963</td>
+<td align="right">0.7037</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>P_i = (a_i+d_i)/n_i and Q_i = (b_i+c_i)/n_i are the concordant and
+discordant proportions in each stratum.</p>
+</blockquote>
+<p><strong>Step 5.</strong> 95% confidence interval, lower limit</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{lower} &amp;= \exp\left(\log OR_{MH} - z \cdot SE\right) \\
+&amp;= \exp(0.3001 - 1.96 \times 0.1734) \\
+&amp;= 0.961
+\end{aligned}
+\]</span></p>
+<p><strong>Step 6.</strong> 95% confidence interval, upper limit</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{upper} &amp;= \exp\left(\log OR_{MH} + z \cdot SE\right) \\
+&amp;= \exp(0.3001 + 1.96 \times 0.1734) \\
+&amp;= 1.8963
+\end{aligned}
+\]</span></p>
+<p><strong>Step 7.</strong> Crude odds ratio, ignoring the strata</p>
+<p><span class="math display">\[
+\begin{aligned}
+OR_{\text{crude}} &amp;= \frac{A D}{B C} \quad \text{on the collapsed
+table} \\
+&amp;= (139 \times 502) / (443 \times 230) \\
+&amp;= 0.6848
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>The crude estimate differs from the adjusted one by -49.3%. A change
+beyond about 10% is the usual working signal that the stratifying
+variable confounds the association. This is a judgement about the data,
+not a hypothesis test – do not decide it with a p-value.</p>
+</blockquote>
+<p><strong>Result:</strong> <span class="math inline">\(OR_{MH} =
+1.3499\)</span> (95% CI 0.961 to 1.8963)</p>
+<ul>
+<li>Pooling assumes one common odds ratio underlies every stratum. Check
+that with homogeneity() before reporting this number.</li>
+</ul>
 <p>The weights are the part worth dwelling on. <code>S_i</code> is what
 each stratum contributes, and the pooled estimate is their weighted
 average — which is why <code>OR_MH</code> must land between the smallest
@@ -672,39 +934,58 @@ the comparison is arithmetic rather than assertion.</p>
 underlies every stratum. If the strata genuinely differ, the stratifying
 variable is an effect modifier and pooling destroys the finding rather
 than reporting it.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">1</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">homogeneity</span>(smoking)</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; ── Breslow-Day test of homogeneity ─────────────────────────────────────────</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; Step 1  Expected exposed cases in each stratum under a common OR</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;         A_i = root of  (1-psi)A^2 + (N - n1 - m1 + psi(n1+m1))A - psi*n1*m1 = 0</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;         # A_i is what cell a would be if this stratum had exactly the</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt;         # pooled odds ratio, holding its margins fixed. Solving a quadratic</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;         # is the one step here you would not do by hand.</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; Step 2  Contribution of each stratum to the statistic</span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;         X2_i = (a_i - A_i)^2 / Var(A_i)</span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;         # A single large contribution means one stratum is driving the</span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt;         # result.</span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; Step 3  Statistic, with Tarone&#39;s correction</span></span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt;         X2 = sum(X2_i) - (sum(a_i) - sum(A_i))^2 / sum(Var(A_i))</span></span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt;            = 0.1182</span></span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; Step 4  Reference distribution</span></span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt;         p = P(chi-squared with K - 1 df &gt; X2)</span></span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt;           = 0.9426</span></span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt; Result</span></span>
-<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co">#&gt;   X2 = 0.1182</span></span>
-<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co">#&gt; Notes</span></span>
-<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co">#&gt;   p = 0.9426 on 2 degrees of freedom.</span></span>
-<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co">#&gt;   A large p-value is not evidence that the odds ratios are equal. This test</span></span>
-<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a><span class="co">#&gt;   has poor power with small strata, so it will usually fail to reject</span></span>
-<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a><span class="co">#&gt;   whether or not effect modification is present. Inspect the</span></span>
-<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a><span class="co">#&gt;   stratum-specific estimates as well; they are the more informative thing.</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">1</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">homogeneity</span>(smoking)</span></code></pre></div>
+<p><strong>Breslow-Day test of homogeneity</strong></p>
+<p><strong>Step 1.</strong> Expected exposed cases in each stratum under
+a common OR</p>
+<p><span class="math display">\[
+\begin{aligned}
+A_i &amp;= \text{root of } (1-\psi)A^2 + \left(N - n_1 - m_1 + \psi(n_1
++ m_1)\right)A - \psi n_1 m_1 = 0
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>A_i is what cell a would be if this stratum had exactly the pooled
+odds ratio, holding its margins fixed. Solving a quadratic is the one
+step here you would not do by hand.</p>
+</blockquote>
+<p><strong>Step 2.</strong> Contribution of each stratum to the
+statistic</p>
+<p><span class="math display">\[
+\begin{aligned}
+X^2_i &amp;= \frac{(a_i - A_i)^2}{\operatorname{Var}(A_i)}
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>A single large contribution means one stratum is driving the
+result.</p>
+</blockquote>
+<p><strong>Step 3.</strong> Statistic, with Tarone’s correction</p>
+<p><span class="math display">\[
+\begin{aligned}
+X^2 &amp;= \sum_i X^2_i - \frac{\left(\sum_i a_i - \sum_i
+A_i\right)^2}{\sum_i \operatorname{Var}(A_i)} \\
+&amp;= 0.1182
+\end{aligned}
+\]</span></p>
+<p><strong>Step 4.</strong> Reference distribution</p>
+<p><span class="math display">\[
+\begin{aligned}
+p &amp;= P\left(\chi^2_{K-1} &gt; X^2\right) \\
+&amp;= 0.9426
+\end{aligned}
+\]</span></p>
+<p><strong>Result:</strong> <span class="math inline">\(X^2 =
+0.1182\)</span></p>
+<ul>
+<li>p = 0.9426 on 2 degrees of freedom.</li>
+<li>A large p-value is not evidence that the odds ratios are equal. This
+test has poor power with small strata, so it will usually fail to reject
+whether or not effect modification is present. Inspect the
+stratum-specific estimates as well; they are the more informative
+thing.</li>
+</ul>
 <p>The statistic is small and the p-value large, and the per-stratum
 contributions show no single stratum straining against the others. Here
 the assumption is comfortable.</p>
@@ -720,89 +1001,162 @@ informative thing.</p>
 computing one on the crude table would propagate the error rather than
 fix it. Work inside a stratum instead, where age is held fixed by
 construction:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>middle <span class="ot">&lt;-</span> <span class="fu">epi2x2</span>(<span class="dv">80</span>, <span class="dv">167</span>, <span class="dv">53</span>, <span class="dv">147</span>,</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                 <span class="at">exposure =</span> <span class="fu">c</span>(<span class="st">&quot;Smoker&quot;</span>, <span class="st">&quot;Non-smoker&quot;</span>),</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>                 <span class="at">outcome  =</span> <span class="fu">c</span>(<span class="st">&quot;Dead&quot;</span>, <span class="st">&quot;Alive&quot;</span>))</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">2</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="fu">attributable_fraction</span>(middle, <span class="at">among =</span> <span class="st">&quot;population&quot;</span>)</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; ── Population attributable fraction ────────────────────────────────────────</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; Data</span></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt;               Dead  Alive  Total</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt;   Smoker        80    167    247</span></span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt;   Non-smoker    53    147    200</span></span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt;   Total        133    314    447</span></span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; Step 1  Risk of Dead among the exposed (Smoker)</span></span>
-<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt;         R1 = a / (a + b)</span></span>
-<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt;            = 80 / (80 + 167)</span></span>
-<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt;            = 0.3239</span></span>
-<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt; Step 2  Risk of Dead among the unexposed (Non-smoker)</span></span>
-<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt;         R0 = c / (c + d)</span></span>
-<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt;            = 53 / (53 + 147)</span></span>
-<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt;            = 0.265</span></span>
-<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt; Step 3  Risk ratio</span></span>
-<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt;         RR = R1 / R0</span></span>
-<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt;            = 0.3239 / 0.265</span></span>
-<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt;            = 1.2222</span></span>
-<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co">#&gt; Step 4  Risk in the whole population</span></span>
-<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="co">#&gt;         Rt = (a + c) / n</span></span>
-<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt;            = (80 + 53) / 447</span></span>
-<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a><span class="co">#&gt;            = 0.2975</span></span>
-<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a><span class="co">#&gt; Step 5  Population attributable fraction, directly from risks</span></span>
-<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a><span class="co">#&gt;         PAF = (Rt - R0) / Rt</span></span>
-<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a><span class="co">#&gt;             = (0.2975 - 0.265) / 0.2975</span></span>
-<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a><span class="co">#&gt;             = 0.1094</span></span>
-<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a><span class="co">#&gt;         # The share of the population&#39;s risk that would disappear if</span></span>
-<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a><span class="co">#&gt;         # everyone had the risk of the unexposed.</span></span>
-<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a><span class="co">#&gt; Step 6  Levin&#39;s formula, from exposure prevalence</span></span>
-<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a><span class="co">#&gt;         PAF = p(RR - 1) / (1 + p(RR - 1))</span></span>
-<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a><span class="co">#&gt;             = 0.5526(1.2222 - 1) / (1 + 0.5526(1.2222 - 1))</span></span>
-<span id="cb8-45"><a href="#cb8-45" tabindex="-1"></a><span class="co">#&gt;             = 0.1094</span></span>
-<span id="cb8-46"><a href="#cb8-46" tabindex="-1"></a><span class="co">#&gt;         # p = (a + b)/n = 0.5526 is the proportion exposed. Use this form</span></span>
-<span id="cb8-47"><a href="#cb8-47" tabindex="-1"></a><span class="co">#&gt;         # when you have the risk ratio from one study and exposure</span></span>
-<span id="cb8-48"><a href="#cb8-48" tabindex="-1"></a><span class="co">#&gt;         # prevalence from another.</span></span>
-<span id="cb8-49"><a href="#cb8-49" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-50"><a href="#cb8-50" tabindex="-1"></a><span class="co">#&gt; Step 7  Miettinen&#39;s formula, from the proportion of cases exposed</span></span>
-<span id="cb8-51"><a href="#cb8-51" tabindex="-1"></a><span class="co">#&gt;         PAF = pc * (RR - 1) / RR</span></span>
-<span id="cb8-52"><a href="#cb8-52" tabindex="-1"></a><span class="co">#&gt;             = 0.6015 * (1.2222 - 1) / 1.2222</span></span>
-<span id="cb8-53"><a href="#cb8-53" tabindex="-1"></a><span class="co">#&gt;             = 0.1094</span></span>
-<span id="cb8-54"><a href="#cb8-54" tabindex="-1"></a><span class="co">#&gt;         # pc = a/(a + c) = 0.6015 is the proportion of cases who were</span></span>
-<span id="cb8-55"><a href="#cb8-55" tabindex="-1"></a><span class="co">#&gt;         # exposed. All three lines above are the same number. They are one</span></span>
-<span id="cb8-56"><a href="#cb8-56" tabindex="-1"></a><span class="co">#&gt;         # quantity written three ways, not three estimators to choose</span></span>
-<span id="cb8-57"><a href="#cb8-57" tabindex="-1"></a><span class="co">#&gt;         # between.</span></span>
-<span id="cb8-58"><a href="#cb8-58" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-59"><a href="#cb8-59" tabindex="-1"></a><span class="co">#&gt; Step 8  95% confidence interval</span></span>
-<span id="cb8-60"><a href="#cb8-60" tabindex="-1"></a><span class="co">#&gt;         CI = Levin&#39;s formula applied to each limit of the RR interval</span></span>
-<span id="cb8-61"><a href="#cb8-61" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-62"><a href="#cb8-62" tabindex="-1"></a><span class="co">#&gt;         limit     RR      PAF</span></span>
-<span id="cb8-63"><a href="#cb8-63" tabindex="-1"></a><span class="co">#&gt;         -----  -----  -------</span></span>
-<span id="cb8-64"><a href="#cb8-64" tabindex="-1"></a><span class="co">#&gt;         lower  0.912  -0.0511</span></span>
-<span id="cb8-65"><a href="#cb8-65" tabindex="-1"></a><span class="co">#&gt;         upper  1.638   0.2607</span></span>
-<span id="cb8-66"><a href="#cb8-66" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-67"><a href="#cb8-67" tabindex="-1"></a><span class="co">#&gt;         # This holds exposure prevalence fixed at its observed value, so</span></span>
-<span id="cb8-68"><a href="#cb8-68" tabindex="-1"></a><span class="co">#&gt;         # the interval is slightly too narrow. It is the version you can</span></span>
-<span id="cb8-69"><a href="#cb8-69" tabindex="-1"></a><span class="co">#&gt;         # compute by hand; a delta-method interval that propagates</span></span>
-<span id="cb8-70"><a href="#cb8-70" tabindex="-1"></a><span class="co">#&gt;         # uncertainty in p as well is wider.</span></span>
-<span id="cb8-71"><a href="#cb8-71" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-72"><a href="#cb8-72" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-73"><a href="#cb8-73" tabindex="-1"></a><span class="co">#&gt; Result</span></span>
-<span id="cb8-74"><a href="#cb8-74" tabindex="-1"></a><span class="co">#&gt;   PAF = 0.1094 (95% CI -0.0511 to 0.2607)</span></span>
-<span id="cb8-75"><a href="#cb8-75" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-76"><a href="#cb8-76" tabindex="-1"></a><span class="co">#&gt; Notes</span></span>
-<span id="cb8-77"><a href="#cb8-77" tabindex="-1"></a><span class="co">#&gt;   Read as: 10.9% of all cases in this population are attributable to the</span></span>
-<span id="cb8-78"><a href="#cb8-78" tabindex="-1"></a><span class="co">#&gt;   exposure, if the association is causal.</span></span>
-<span id="cb8-79"><a href="#cb8-79" tabindex="-1"></a><span class="co">#&gt;   PAF depends on how common the exposure is, so it does not transfer</span></span>
-<span id="cb8-80"><a href="#cb8-80" tabindex="-1"></a><span class="co">#&gt;   between populations the way a risk ratio does. A strong risk factor that</span></span>
-<span id="cb8-81"><a href="#cb8-81" tabindex="-1"></a><span class="co">#&gt;   is rare has a small PAF; a weak one that is universal can have a large</span></span>
-<span id="cb8-82"><a href="#cb8-82" tabindex="-1"></a><span class="co">#&gt;   one. This is also why PAF from a case-control study needs the exposure</span></span>
-<span id="cb8-83"><a href="#cb8-83" tabindex="-1"></a><span class="co">#&gt;   prevalence of the source population, not of the controls.</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>middle <span class="ot">&lt;-</span> <span class="fu">epi2x2</span>(<span class="dv">80</span>, <span class="dv">167</span>, <span class="dv">53</span>, <span class="dv">147</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>                 <span class="at">exposure =</span> <span class="fu">c</span>(<span class="st">&quot;Smoker&quot;</span>, <span class="st">&quot;Non-smoker&quot;</span>),</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>                 <span class="at">outcome  =</span> <span class="fu">c</span>(<span class="st">&quot;Dead&quot;</span>, <span class="st">&quot;Alive&quot;</span>))</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">2</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="fu">attributable_fraction</span>(middle, <span class="at">among =</span> <span class="st">&quot;population&quot;</span>)</span></code></pre></div>
+<p><strong>Population attributable fraction</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Dead</th>
+<th align="right">Alive</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Smoker</td>
+<td align="right">80</td>
+<td align="right">167</td>
+<td align="right">247</td>
+</tr>
+<tr class="even">
+<td align="left">Non-smoker</td>
+<td align="right">53</td>
+<td align="right">147</td>
+<td align="right">200</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">133</td>
+<td align="right">314</td>
+<td align="right">447</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Step 1.</strong> Risk of Dead among the exposed (Smoker)</p>
+<p><span class="math display">\[
+\begin{aligned}
+R_1 &amp;= \frac{a}{a + b} \\
+&amp;= 80 / (80 + 167) \\
+&amp;= 0.3239
+\end{aligned}
+\]</span></p>
+<p><strong>Step 2.</strong> Risk of Dead among the unexposed
+(Non-smoker)</p>
+<p><span class="math display">\[
+\begin{aligned}
+R_0 &amp;= \frac{c}{c + d} \\
+&amp;= 53 / (53 + 147) \\
+&amp;= 0.265
+\end{aligned}
+\]</span></p>
+<p><strong>Step 3.</strong> Risk ratio</p>
+<p><span class="math display">\[
+\begin{aligned}
+RR &amp;= \frac{R_1}{R_0} \\
+&amp;= 0.3239 / 0.265 \\
+&amp;= 1.2222
+\end{aligned}
+\]</span></p>
+<p><strong>Step 4.</strong> Risk in the whole population</p>
+<p><span class="math display">\[
+\begin{aligned}
+R_t &amp;= \frac{a + c}{n} \\
+&amp;= (80 + 53) / 447 \\
+&amp;= 0.2975
+\end{aligned}
+\]</span></p>
+<p><strong>Step 5.</strong> Population attributable fraction, directly
+from risks</p>
+<p><span class="math display">\[
+\begin{aligned}
+PAF &amp;= \frac{R_t - R_0}{R_t} \\
+&amp;= (0.2975 - 0.265) / 0.2975 \\
+&amp;= 0.1094
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>The share of the population’s risk that would disappear if everyone
+had the risk of the unexposed.</p>
+</blockquote>
+<p><strong>Step 6.</strong> Levin’s formula, from exposure
+prevalence</p>
+<p><span class="math display">\[
+\begin{aligned}
+PAF &amp;= \frac{p(RR - 1)}{1 + p(RR - 1)} \\
+&amp;= 0.5526(1.2222 - 1) / (1 + 0.5526(1.2222 - 1)) \\
+&amp;= 0.1094
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>p = (a + b)/n = 0.5526 is the proportion exposed. Use this form when
+you have the risk ratio from one study and exposure prevalence from
+another.</p>
+</blockquote>
+<p><strong>Step 7.</strong> Miettinen’s formula, from the proportion of
+cases exposed</p>
+<p><span class="math display">\[
+\begin{aligned}
+PAF &amp;= p_c \cdot \frac{RR - 1}{RR} \\
+&amp;= 0.6015 \times (1.2222 - 1) / 1.2222 \\
+&amp;= 0.1094
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>pc = a/(a + c) = 0.6015 is the proportion of cases who were exposed.
+All three lines above are the same number. They are one quantity written
+three ways, not three estimators to choose between.</p>
+</blockquote>
+<p><strong>Step 8.</strong> 95% confidence interval</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{CI} &amp;= \text{Levin&#39;s formula applied to each limit of the
+} RR \text{ interval}
+\end{aligned}
+\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">limit</th>
+<th align="right">RR</th>
+<th align="right">PAF</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">lower</td>
+<td align="right">0.912</td>
+<td align="right">-0.0511</td>
+</tr>
+<tr class="even">
+<td align="left">upper</td>
+<td align="right">1.638</td>
+<td align="right">0.2607</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>This holds exposure prevalence fixed at its observed value, so the
+interval is slightly too narrow. It is the version you can compute by
+hand; a delta-method interval that propagates uncertainty in p as well
+is wider.</p>
+</blockquote>
+<p><strong>Result:</strong> <span class="math inline">\(PAF =
+0.1094\)</span> (95% CI -0.0511 to 0.2607)</p>
+<ul>
+<li>Read as: 10.9% of all cases in this population are attributable to
+the exposure, if the association is causal.</li>
+<li>PAF depends on how common the exposure is, so it does not transfer
+between populations the way a risk ratio does. A strong risk factor that
+is rare has a small PAF; a weak one that is universal can have a large
+one. This is also why PAF from a case-control study needs the exposure
+prevalence of the source population, not of the controls.</li>
+</ul>
 <p>Three formulas for the population attributable fraction circulate in
 textbooks and students are rarely shown that they are the same quantity.
 The derivation computes all three — directly from risks, by Levin’s
@@ -815,15 +1169,15 @@ one number written three ways.</p>
 <p>Give <code>check_work()</code> a value and it compares it against the
 final estimate. When that does not match, it searches every intermediate
 step for one that does:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">0</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">odds_ratio</span>(crude)</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="fu">check_work</span>(d, <span class="fl">0.3137</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; Not a match. You gave 0.3137; the final estimate (OR) is 0.6848.</span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; Your value does match step 1: Odds of Dead among the exposed (Smoker).</span></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt;   odds1 = a / b</span></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; You may have stopped early. The next step is: Odds of Dead among the unexposed (Non-smoker).</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">0</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">odds_ratio</span>(crude)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">check_work</span>(d, <span class="fl">0.3137</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; Not a match. You gave 0.3137; the final estimate (OR) is 0.6848.</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; Your value does match step 1: Odds of Dead among the exposed (Smoker).</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt;   odds1 = a / b</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; You may have stopped early. The next step is: Odds of Dead among the unexposed (Non-smoker).</span></span></code></pre></div>
 <p>The student did not fail; they computed the odds among the exposed
 and stopped. That is a different problem from an arithmetic slip, and it
 needs a different sentence from the person teaching them.</p>
@@ -833,15 +1187,15 @@ needs a different sentence from the person teaching them.</p>
 <p><code>steps_table()</code> returns the whole derivation as a data
 frame, which is what you want when generating answer keys or rendering
 the working somewhere this package does not reach:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">steps_table</span>(<span class="fu">mh_odds_ratio</span>(smoking))[, <span class="fu">c</span>(<span class="st">&quot;symbol&quot;</span>, <span class="st">&quot;label&quot;</span>, <span class="st">&quot;result&quot;</span>)]</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt;     symbol                                                  label    result</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; 1     OR_i                         Odds ratio within each stratum        NA</span></span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; 2     &lt;NA&gt;                                  Stratum contributions        NA</span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; 3    OR_MH                                      Pooled odds ratio 1.3499462</span></span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; 4       SE Standard error of log(OR_MH), Robins-Breslow-Greenland 0.1733784</span></span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; 5    lower                   95% confidence interval, lower limit 0.9610291</span></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; 6    upper                   95% confidence interval, upper limit 1.8962535</span></span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; 7 OR_crude                  Crude odds ratio, ignoring the strata 0.6848366</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">steps_table</span>(<span class="fu">mh_odds_ratio</span>(smoking))[, <span class="fu">c</span>(<span class="st">&quot;symbol&quot;</span>, <span class="st">&quot;label&quot;</span>, <span class="st">&quot;result&quot;</span>)]</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt;     symbol                                                  label    result</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt; 1     OR_i                         Odds ratio within each stratum        NA</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; 2     &lt;NA&gt;                                  Stratum contributions        NA</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; 3    OR_MH                                      Pooled odds ratio 1.3499462</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; 4       SE Standard error of log(OR_MH), Robins-Breslow-Greenland 0.1733784</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; 5    lower                   95% confidence interval, lower limit 0.9610291</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt; 6    upper                   95% confidence interval, upper limit 1.8962535</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt; 7 OR_crude                  Crude odds ratio, ignoring the strata 0.6848366</span></span></code></pre></div>
 <p>Output detail is controlled globally with
 <code>options(epibyhand.verbose = )</code>, where <code>0</code> prints
 the result alone, <code>1</code> adds the symbolic formulas, and
@@ -853,57 +1207,86 @@ the result alone, <code>1</code> adds the symbolic formulas, and
 <p>Adjustment is not the only place where a number depends on the
 population rather than the test. A screening example makes the point
 sharply:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">1</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>screening <span class="ot">&lt;-</span> <span class="fu">epi2x2</span>(<span class="dv">90</span>, <span class="dv">180</span>, <span class="dv">10</span>, <span class="dv">1720</span>,</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>                    <span class="at">exposure =</span> <span class="fu">c</span>(<span class="st">&quot;Test positive&quot;</span>, <span class="st">&quot;Test negative&quot;</span>),</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>                    <span class="at">outcome  =</span> <span class="fu">c</span>(<span class="st">&quot;Diseased&quot;</span>, <span class="st">&quot;Healthy&quot;</span>))</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="fu">predictive_value</span>(screening)</span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt; ── Positive predictive value ───────────────────────────────────────────────</span></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt; Step 1  Sensitivity: of those who are Diseased, the proportion the test finds</span></span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt;         Sens = TP / (TP + FN)</span></span>
-<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt;              = 0.9</span></span>
-<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co">#&gt; Step 2  Specificity: of those who are Healthy, the proportion the test clears</span></span>
-<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="co">#&gt;         Spec = TN / (FP + TN)</span></span>
-<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a><span class="co">#&gt;              = 0.9053</span></span>
-<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="co">#&gt; Step 3  Prevalence in this table</span></span>
-<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="co">#&gt;         Prev = (TP + FN) / n</span></span>
-<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="co">#&gt;              = 0.05</span></span>
-<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="co">#&gt;         # Sensitivity and specificity are properties of the test.</span></span>
-<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a><span class="co">#&gt;         # Everything below also depends on this number.</span></span>
-<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="co">#&gt; Step 4  Positive predictive value, by Bayes&#39; theorem</span></span>
-<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="co">#&gt;         PPV = Sens*Prev / (Sens*Prev + (1-Spec)*(1-Prev))</span></span>
-<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a><span class="co">#&gt;             = 0.3333</span></span>
-<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a><span class="co">#&gt;         # Equivalently TP / (TP + FP) = 90 / (90 + 180) = 0.3333. The two</span></span>
-<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a><span class="co">#&gt;         # agree because the prevalence used is the one in this table.</span></span>
-<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a><span class="co">#&gt; Step 5  Standard error of the proportion</span></span>
-<span id="cb11-31"><a href="#cb11-31" tabindex="-1"></a><span class="co">#&gt;         SE = sqrt(p(1 - p) / n)</span></span>
-<span id="cb11-32"><a href="#cb11-32" tabindex="-1"></a><span class="co">#&gt;            = 0.0287</span></span>
-<span id="cb11-33"><a href="#cb11-33" tabindex="-1"></a><span class="co">#&gt;         # A predictive value is a proportion of those the test called, so n</span></span>
-<span id="cb11-34"><a href="#cb11-34" tabindex="-1"></a><span class="co">#&gt;         # here is the number the test called, not the whole table.</span></span>
-<span id="cb11-35"><a href="#cb11-35" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-36"><a href="#cb11-36" tabindex="-1"></a><span class="co">#&gt; Step 6  95% confidence interval</span></span>
-<span id="cb11-37"><a href="#cb11-37" tabindex="-1"></a><span class="co">#&gt;         CI = p +/- z * SE</span></span>
-<span id="cb11-38"><a href="#cb11-38" tabindex="-1"></a><span class="co">#&gt;         # Normal approximation, clamped to [0, 1]. It is the version you</span></span>
-<span id="cb11-39"><a href="#cb11-39" tabindex="-1"></a><span class="co">#&gt;         # can compute by hand; near 0 or 1 an exact or Wilson interval is</span></span>
-<span id="cb11-40"><a href="#cb11-40" tabindex="-1"></a><span class="co">#&gt;         # better behaved.</span></span>
-<span id="cb11-41"><a href="#cb11-41" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-42"><a href="#cb11-42" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-43"><a href="#cb11-43" tabindex="-1"></a><span class="co">#&gt; Result</span></span>
-<span id="cb11-44"><a href="#cb11-44" tabindex="-1"></a><span class="co">#&gt;   PPV = 0.3333 (95% CI 0.2771 to 0.3896)</span></span>
-<span id="cb11-45"><a href="#cb11-45" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-46"><a href="#cb11-46" tabindex="-1"></a><span class="co">#&gt; Notes</span></span>
-<span id="cb11-47"><a href="#cb11-47" tabindex="-1"></a><span class="co">#&gt;   Read as: of everyone this test calls positive, 33.3% really are diseased.</span></span>
-<span id="cb11-48"><a href="#cb11-48" tabindex="-1"></a><span class="co">#&gt;   Predictive values are not properties of the test. Move the same test to a</span></span>
-<span id="cb11-49"><a href="#cb11-49" tabindex="-1"></a><span class="co">#&gt;   population with different prevalence and this number changes, while</span></span>
-<span id="cb11-50"><a href="#cb11-50" tabindex="-1"></a><span class="co">#&gt;   sensitivity and specificity do not. That is why a test that performs well</span></span>
-<span id="cb11-51"><a href="#cb11-51" tabindex="-1"></a><span class="co">#&gt;   in a clinic can be useless as a population screen.</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>screening <span class="ot">&lt;-</span> <span class="fu">epi2x2</span>(<span class="dv">90</span>, <span class="dv">180</span>, <span class="dv">10</span>, <span class="dv">1720</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>                    <span class="at">exposure =</span> <span class="fu">c</span>(<span class="st">&quot;Test positive&quot;</span>, <span class="st">&quot;Test negative&quot;</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>                    <span class="at">outcome  =</span> <span class="fu">c</span>(<span class="st">&quot;Diseased&quot;</span>, <span class="st">&quot;Healthy&quot;</span>))</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="fu">predictive_value</span>(screening)</span></code></pre></div>
+<p><strong>Positive predictive value</strong></p>
+<p><strong>Step 1.</strong> Sensitivity: of those who are Diseased, the
+proportion the test finds</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{Sens} &amp;= \frac{TP}{TP + FN} \\
+&amp;= 0.9
+\end{aligned}
+\]</span></p>
+<p><strong>Step 2.</strong> Specificity: of those who are Healthy, the
+proportion the test clears</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{Spec} &amp;= \frac{TN}{FP + TN} \\
+&amp;= 0.9053
+\end{aligned}
+\]</span></p>
+<p><strong>Step 3.</strong> Prevalence in this table</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{Prev} &amp;= \frac{TP + FN}{n} \\
+&amp;= 0.05
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>Sensitivity and specificity are properties of the test. Everything
+below also depends on this number.</p>
+</blockquote>
+<p><strong>Step 4.</strong> Positive predictive value, by Bayes’
+theorem</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{PPV} &amp;= \frac{\text{Sens} \cdot \text{Prev}}{\text{Sens} \cdot
+\text{Prev} + (1 - \text{Spec})(1 - \text{Prev})} \\
+&amp;= 0.3333
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>Equivalently TP / (TP + FP) = 90 / (90 + 180) = 0.3333. The two agree
+because the prevalence used is the one in this table.</p>
+</blockquote>
+<p><strong>Step 5.</strong> Standard error of the proportion</p>
+<p><span class="math display">\[
+\begin{aligned}
+SE &amp;= \sqrt{\frac{p(1 - p)}{n}} \\
+&amp;= 0.0287
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>A predictive value is a proportion of those the test called, so n
+here is the number the test called, not the whole table.</p>
+</blockquote>
+<p><strong>Step 6.</strong> 95% confidence interval</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{CI} &amp;= p \pm z \cdot SE
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>Normal approximation, clamped to [0, 1]. It is the version you can
+compute by hand; near 0 or 1 an exact or Wilson interval is better
+behaved.</p>
+</blockquote>
+<p><strong>Result:</strong> <span class="math inline">\(\text{PPV} =
+0.3333\)</span> (95% CI 0.2771 to 0.3896)</p>
+<ul>
+<li>Read as: of everyone this test calls positive, 33.3% really are
+diseased.</li>
+<li>Predictive values are not properties of the test. Move the same test
+to a population with different prevalence and this number changes, while
+sensitivity and specificity do not. That is why a test that performs
+well in a clinic can be useless as a population screen.</li>
+</ul>
 <p>A test that is 90% sensitive and 90% specific, applied where 5% of
 people are actually ill, is wrong two times out of three when it says
 you are sick.</p>
@@ -911,12 +1294,89 @@ you are sick.</p>
 predictive value is a property of the test <em>and</em> the population,
 which is why <code>prevalence</code> can be supplied to ask what the
 same test would do somewhere else:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">0</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">vapply</span>(<span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.20</span>, <span class="fl">0.50</span>),</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>       <span class="cf">function</span>(p) <span class="fu">estimate</span>(<span class="fu">predictive_value</span>(screening, <span class="at">prevalence =</span> p)),</span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>       <span class="fu">numeric</span>(<span class="dv">1</span>))</span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; [1] 0.0875576 0.3333333 0.7037037 0.9047619</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">epibyhand.verbose =</span> <span class="dv">0</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">vapply</span>(<span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.20</span>, <span class="fl">0.50</span>),</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>       <span class="cf">function</span>(p) <span class="fu">estimate</span>(<span class="fu">predictive_value</span>(screening, <span class="at">prevalence =</span> p)),</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>       <span class="fu">numeric</span>(<span class="dv">1</span>))</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; [1] 0.0875576 0.3333333 0.7037037 0.9047619</span></span></code></pre></div>
 <p>Nothing about the test changed across those four numbers.</p>
+</div>
+<div id="in-your-own-documents" class="section level2">
+<h2>In your own documents</h2>
+<p>Every derivation in this vignette has been typeset as mathematics,
+with fractions, square roots and subscripts, and none of the code above
+asks for that. When a derivation is the value of a chunk in a Quarto or
+R Markdown document, it is rendered this way automatically, to HTML, PDF
+or Word.</p>
+<p>That makes an answer key a matter of writing the questions: the
+worked solutions come from the same calls a student would make.</p>
+<p>For problem sets written in LaTeX directly, <code>to_latex()</code>
+returns the same derivation as a fragment that needs only
+<code>\usepackage{amsmath}</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">to_latex</span>(<span class="fu">odds_ratio</span>(crude), <span class="at">verbose =</span> <span class="dv">1</span>))</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt; \medskip\noindent\textbf{Odds ratio}\par\smallskip</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; \noindent\textbf{Step 1.} Odds of Dead among the exposed (Smoker)</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; \[</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; \begin{aligned}</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; \text{odds}_1 &amp;= \frac{a}{b} \\</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; &amp;= 0.3138</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; \end{aligned}</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt; \]</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt; \medskip</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co">#&gt; \noindent\textbf{Step 2.} Odds of Dead among the unexposed (Non-smoker)</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt; \[</span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt; \begin{aligned}</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt; \text{odds}_0 &amp;= \frac{c}{d} \\</span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt; &amp;= 0.4582</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt; \end{aligned}</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co">#&gt; \]</span></span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="co">#&gt; \medskip</span></span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a><span class="co">#&gt; \noindent\textbf{Step 3.} Odds ratio</span></span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a><span class="co">#&gt; \[</span></span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a><span class="co">#&gt; \begin{aligned}</span></span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a><span class="co">#&gt; OR &amp;= \frac{\text{odds}_1}{\text{odds}_0} \\</span></span>
+<span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a><span class="co">#&gt; &amp;= 0.6848</span></span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a><span class="co">#&gt; \end{aligned}</span></span>
+<span id="cb14-27"><a href="#cb14-27" tabindex="-1"></a><span class="co">#&gt; \]</span></span>
+<span id="cb14-28"><a href="#cb14-28" tabindex="-1"></a><span class="co">#&gt; {\small\emph{Equivalently OR = ad / bc, which is why the odds ratio is the same whether you condition on exposure or on outcome. That symmetry is what makes it usable in case-control studies.}}\par</span></span>
+<span id="cb14-29"><a href="#cb14-29" tabindex="-1"></a><span class="co">#&gt; \medskip</span></span>
+<span id="cb14-30"><a href="#cb14-30" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-31"><a href="#cb14-31" tabindex="-1"></a><span class="co">#&gt; \noindent\textbf{Step 4.} Standard error of log(OR), Woolf&#39;s method</span></span>
+<span id="cb14-32"><a href="#cb14-32" tabindex="-1"></a><span class="co">#&gt; \[</span></span>
+<span id="cb14-33"><a href="#cb14-33" tabindex="-1"></a><span class="co">#&gt; \begin{aligned}</span></span>
+<span id="cb14-34"><a href="#cb14-34" tabindex="-1"></a><span class="co">#&gt; SE &amp;= \sqrt{\frac{1}{a} + \frac{1}{b} + \frac{1}{c} + \frac{1}{d}} \\</span></span>
+<span id="cb14-35"><a href="#cb14-35" tabindex="-1"></a><span class="co">#&gt; &amp;= 0.1257</span></span>
+<span id="cb14-36"><a href="#cb14-36" tabindex="-1"></a><span class="co">#&gt; \end{aligned}</span></span>
+<span id="cb14-37"><a href="#cb14-37" tabindex="-1"></a><span class="co">#&gt; \]</span></span>
+<span id="cb14-38"><a href="#cb14-38" tabindex="-1"></a><span class="co">#&gt; \medskip</span></span>
+<span id="cb14-39"><a href="#cb14-39" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-40"><a href="#cb14-40" tabindex="-1"></a><span class="co">#&gt; \noindent\textbf{Step 5.} 95\% confidence interval, lower limit</span></span>
+<span id="cb14-41"><a href="#cb14-41" tabindex="-1"></a><span class="co">#&gt; \[</span></span>
+<span id="cb14-42"><a href="#cb14-42" tabindex="-1"></a><span class="co">#&gt; \begin{aligned}</span></span>
+<span id="cb14-43"><a href="#cb14-43" tabindex="-1"></a><span class="co">#&gt; \text{lower} &amp;= \exp\left(\log OR - z \cdot SE\right) \\</span></span>
+<span id="cb14-44"><a href="#cb14-44" tabindex="-1"></a><span class="co">#&gt; &amp;= 0.5353</span></span>
+<span id="cb14-45"><a href="#cb14-45" tabindex="-1"></a><span class="co">#&gt; \end{aligned}</span></span>
+<span id="cb14-46"><a href="#cb14-46" tabindex="-1"></a><span class="co">#&gt; \]</span></span>
+<span id="cb14-47"><a href="#cb14-47" tabindex="-1"></a><span class="co">#&gt; \medskip</span></span>
+<span id="cb14-48"><a href="#cb14-48" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-49"><a href="#cb14-49" tabindex="-1"></a><span class="co">#&gt; \noindent\textbf{Step 6.} 95\% confidence interval, upper limit</span></span>
+<span id="cb14-50"><a href="#cb14-50" tabindex="-1"></a><span class="co">#&gt; \[</span></span>
+<span id="cb14-51"><a href="#cb14-51" tabindex="-1"></a><span class="co">#&gt; \begin{aligned}</span></span>
+<span id="cb14-52"><a href="#cb14-52" tabindex="-1"></a><span class="co">#&gt; \text{upper} &amp;= \exp\left(\log OR + z \cdot SE\right) \\</span></span>
+<span id="cb14-53"><a href="#cb14-53" tabindex="-1"></a><span class="co">#&gt; &amp;= 0.8761</span></span>
+<span id="cb14-54"><a href="#cb14-54" tabindex="-1"></a><span class="co">#&gt; \end{aligned}</span></span>
+<span id="cb14-55"><a href="#cb14-55" tabindex="-1"></a><span class="co">#&gt; \]</span></span>
+<span id="cb14-56"><a href="#cb14-56" tabindex="-1"></a><span class="co">#&gt; \medskip</span></span>
+<span id="cb14-57"><a href="#cb14-57" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-58"><a href="#cb14-58" tabindex="-1"></a><span class="co">#&gt; \noindent\textbf{Result:} $OR = 0.6848$ (95\% CI 0.5353 to 0.8761)\par</span></span>
+<span id="cb14-59"><a href="#cb14-59" tabindex="-1"></a><span class="co">#&gt; \begin{itemize}</span></span>
+<span id="cb14-60"><a href="#cb14-60" tabindex="-1"></a><span class="co">#&gt; \item These data are tabulated as a cohort, where risk is estimable. The risk ratio here is 0.7601 against an odds ratio of 0.6848 -- the odds ratio is the more extreme of the two, and always will be. The two converge only when the outcome is rare; baseline risk here is 0.3142.</span></span>
+<span id="cb14-61"><a href="#cb14-61" tabindex="-1"></a><span class="co">#&gt; \end{itemize}</span></span></code></pre></div>
+<p><code>standalone = TRUE</code> wraps it in a complete document. If
+you would rather keep the console style in a document, set
+<code>options(epibyhand.knit = &quot;console&quot;)</code>.</p>
 </div>
 <div id="scope" class="section level2">
 <h2>Scope</h2>

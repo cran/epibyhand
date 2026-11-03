@@ -1,7 +1,7 @@
 Package: epibyhand
 Type: Package
 Title: Worked Derivations for Classical Epidemiological Measures
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: person("Raj", "Subedi", email = "rajsubediresearch@gmail.com",
     role = c("aut", "cre"))
 Description: Computes classical epidemiological measures and returns the
@@ -24,10 +24,10 @@ Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://github.com/rajsubediresearch/epibyhand
 BugReports: https://github.com/rajsubediresearch/epibyhand/issues
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.1
 NeedsCompilation: no
-Packaged: 2026-09-08 23:57:17 UTC; razsu
+Packaged: 2026-11-03 02:40:08 UTC; rajsubedi
 Author: Raj Subedi [aut, cre]
 Maintainer: Raj Subedi <rajsubediresearch@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-09-09 02:10:02 UTC
+Date/Publication: 2026-11-03 03:40:02 UTC
